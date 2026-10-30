@@ -1,0 +1,55 @@
+name: portfolio-ci
+on:
+  push:
+    branches: [main, portfolio/curated-domain-projects]
+  pull_request:
+    branches: [main]
+jobs:
+  offline-project-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            projects/fraud-risk-intelligence/requirements.txt
+            projects/retail-demand-forecasting/requirements.txt
+            projects/revenue-forecasting/requirements.txt
+            projects/transaction-lakehouse/requirements.txt
+            projects/industrial-knowledge-assistant/requirements.txt
+      - name: Install all offline demo dependencies
+        run: |
+          python -m pip install -r projects/fraud-risk-intelligence/requirements.txt
+          python -m pip install -r projects/retail-demand-forecasting/requirements.txt
+          python -m pip install -r projects/revenue-forecasting/requirements.txt
+          python -m pip install -r projects/transaction-lakehouse/requirements.txt
+          python -m pip install -r projects/industrial-knowledge-assistant/requirements.txt
+      - name: Run project unit tests
+        run: |
+          pytest --import-mode=importlib -q projects/fraud-risk-intelligence/tests projects/retail-demand-forecasting/tests projects/revenue-forecasting/tests projects/transaction-lakehouse/tests projects/industrial-knowledge-assistant/tests
+      - name: Execute synthetic pipelines
+        run: |
+          python projects/fraud-risk-intelligence/src/pipeline.py
+          python projects/retail-demand-forecasting/pipeline.py
+          python projects/transaction-lakehouse/src/pipeline.py
+          python projects/revenue-forecasting/pipeline.py
+          python projects/industrial-knowledge-assistant/evaluate.py
+          python projects/retail-demand-forecasting/plot_results.py
+          python projects/revenue-forecasting/plot_results.py
+      - name: Upload reproducible demo reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-demo-reports
+          if-no-files-found: error
+          path: |
+            projects/fraud-risk-intelligence/artifacts/metrics.json
+            projects/retail-demand-forecasting/outputs/metrics.json
+            projects/retail-demand-forecasting/outputs/next_day_forecast.csv
+            projects/retail-demand-forecasting/outputs/retail_forecast_example.png
+            projects/revenue-forecasting/outputs/revenue_forecast_example.png
+            projects/revenue-forecasting/outputs/backtest.csv
+            projects/revenue-forecasting/outputs/forecasts.csv
+            projects/transaction-lakehouse/artifacts/quality.json

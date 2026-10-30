@@ -1,41 +1,19 @@
-# Transaction Lakehouse
+# Transaction Lakehouse — Data Engineering
 
-**Track:** Data platform  
-**Stage:** scoped / not yet implemented. No model scores, performance benchmarks, UI demo, or deployments are claimed.
+**Runnable:** deterministic bronze (raw) -> silver (validated and deduplicated) -> gold (daily settled aggregates) demonstration using pandas. A **separate optional PySpark implementation** of silver and gold is provided but requires a local Spark/JDK setup and must be verified independently.
 
-## Problem
-Reconstruct consistent transaction analytics from late, duplicated and malformed synthetic events.
+## Run
+```bash
+pip install -r projects/transaction-lakehouse/requirements.txt
+python projects/transaction-lakehouse/src/pipeline.py
+pytest -q projects/transaction-lakehouse/tests
+```
+Review `artifacts/bronze.csv`, `silver.csv`, `gold_daily.csv`, and `quality.json`.
 
-## Dataset
-Deterministic locally generated transaction streams; optional separate UCI Online Retail II demonstration.
-See [dataset card](docs/DATA_CARD.md), [research review](docs/RESEARCH_REVIEW.md), and the [shared data register](../../docs/DATASET_REGISTER.md).
+## PySpark optional
+```bash
+pip install -r projects/transaction-lakehouse/requirements-spark.txt
+python projects/transaction-lakehouse/src/spark_pipeline.py
+```
 
-## Proposed architecture
-`data/raw -> schema and quality checks -> clean/curated table -> baseline -> validation/evaluation -> artifacts -> optional serving/UI`
-
-## Technology candidates
-PySpark, Spark SQL, Parquet/Delta (compatibility checked), optional Airflow, pytest, Docker.. Final decisions depend on baseline evidence and laptop/cloud resource constraints.
-
-## Planned evaluation
-Idempotency, quality rejection counts, end-to-end throughput and cost per workload on specified hardware.
-
-## Next implementation
-Implement raw generator, bronze/silver/gold, schema contracts, idempotency, incremental updates.
-
-## Folder map
-- `data/raw/`: source download location (ignored)
-- `data/interim/`: cleaning outputs (ignored)
-- `data/processed/`: model-ready outputs (ignored)
-- `notebooks/`: exploration and experiments
-- `src/`: maintainable pipeline/application source
-- `tests/`: unit and integration tests
-- `configs/`: schema/experiment configuration
-- `docs/DATA_CARD.md`: source, provenance and risks
-- `docs/RESEARCH_REVIEW.md`: references, tradeoffs and decisions
-- `artifacts/`: local models and plots (ignored)
-
-## Acceptance conditions
-Actual ingestion + reproducible tests + measured baseline + justified model selection + observed failures + clear run instructions. A working real-data end-to-end run must precede the label "portfolio-ready".
-
-## Ethical and technical boundaries
-Public/licensed or synthetic data only; no client or employer information; no invented benchmarks or deployment claims.
+Important: This is **not** a Delta lake, streaming system, complete CDC implementation, or measured 300M+ events/day platform. It has no persistent state or late-arrival watermark yet. Do not claim performance beyond locally measured throughput. Synthetic data has no private customer details. Design notes: [data card](docs/DATA_CARD.md).

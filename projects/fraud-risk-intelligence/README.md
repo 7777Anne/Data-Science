@@ -1,41 +1,16 @@
-# Fraud Risk Intelligence
+# Fraud Risk Intelligence — Classification and Risk Thresholds
 
-**Track:** ML platform  
-**Stage:** scoped / not yet implemented. No model scores, performance benchmarks, UI demo, or deployments are claimed.
+**Implemented:** deterministic synthetic transaction generator; prediction-time features; chronological split; imputation fitted only on training records; balanced logistic-regression baseline; validation-selected F1 threshold; held-out PR-AUC/precision/recall; unit tests and model artifacts.
 
-## Problem
-Explain and classify potentially fraudulent digital transactions at scoring time.
+**Not yet implemented:** PaySim evaluation, XGBoost/SHAP, probability calibration, production scoring, real 300M/day benchmarking. No model score is asserted without running the pipeline.
 
-## Dataset
-PaySim synthetic mobile money (subject to access/license), with deterministic synthetic fallback.
-See [dataset card](docs/DATA_CARD.md), [research review](docs/RESEARCH_REVIEW.md), and the [shared data register](../../docs/DATASET_REGISTER.md).
+## Run (from repository root)
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r projects/fraud-risk-intelligence/requirements.txt
+python projects/fraud-risk-intelligence/src/pipeline.py
+pytest -q projects/fraud-risk-intelligence/tests
+```
+Output: `projects/fraud-risk-intelligence/artifacts/metrics.json` and a locally serialized model (ignored by Git).
 
-## Proposed architecture
-`data/raw -> schema and quality checks -> clean/curated table -> baseline -> validation/evaluation -> artifacts -> optional serving/UI`
-
-## Technology candidates
-Python, pandas, scikit-learn, XGBoost (candidate), MLflow, SHAP, FastAPI, pytest.. Final decisions depend on baseline evidence and laptop/cloud resource constraints.
-
-## Planned evaluation
-Time-safe PR-AUC and precision/recall; compare monetary expected cost, calibrate probabilities, SHAP and threshold choice.
-
-## Next implementation
-Define predict-before-authorization contract; audit post-event balance leakage; baseline, validation, calibration, service.
-
-## Folder map
-- `data/raw/`: source download location (ignored)
-- `data/interim/`: cleaning outputs (ignored)
-- `data/processed/`: model-ready outputs (ignored)
-- `notebooks/`: exploration and experiments
-- `src/`: maintainable pipeline/application source
-- `tests/`: unit and integration tests
-- `configs/`: schema/experiment configuration
-- `docs/DATA_CARD.md`: source, provenance and risks
-- `docs/RESEARCH_REVIEW.md`: references, tradeoffs and decisions
-- `artifacts/`: local models and plots (ignored)
-
-## Acceptance conditions
-Actual ingestion + reproducible tests + measured baseline + justified model selection + observed failures + clear run instructions. A working real-data end-to-end run must precede the label "portfolio-ready".
-
-## Ethical and technical boundaries
-Public/licensed or synthetic data only; no client or employer information; no invented benchmarks or deployment claims.
+**Leakage contract:** Exclude post-event account balances, investigation labels, and merchant outcomes. `previous_tx_count` is strictly prior-event count. If moving to PaySim, rewrite the source contract and feature policy; synthetic data is not interchangeable with actual telecom fraud detection. See [data card](docs/DATA_CARD.md).

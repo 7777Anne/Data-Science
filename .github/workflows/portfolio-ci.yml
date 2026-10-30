@@ -29,7 +29,7 @@ jobs:
           python -m pip install -r projects/industrial-knowledge-assistant/requirements.txt
       - name: Run project unit tests
         run: |
-          pytest -q projects/fraud-risk-intelligence/tests projects/retail-demand-forecasting/tests projects/revenue-forecasting/tests projects/transaction-lakehouse/tests projects/industrial-knowledge-assistant/tests
+          pytest --import-mode=importlib -q projects/fraud-risk-intelligence/tests projects/retail-demand-forecasting/tests projects/revenue-forecasting/tests projects/transaction-lakehouse/tests projects/industrial-knowledge-assistant/tests
       - name: Execute synthetic pipelines
         run: |
           python projects/fraud-risk-intelligence/src/pipeline.py

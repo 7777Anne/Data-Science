@@ -26,4 +26,4 @@ def test_splits_are_ordered_and_disjoint():
 def test_model_metrics_finite():
     _,score=module.fit_evaluate(module.generate_events())
     assert 0<=score["test_pr_auc"]<=1
-    assert np.isfinite(list(score[k] for k in ["test_pr_auc","test_precision","test_recall"]))
+    assert np.isfinite([score[k] for k in ["test_pr_auc","test_precision","test_recall"]]).all()

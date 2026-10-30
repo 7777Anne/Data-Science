@@ -40,7 +40,7 @@ def next_day_features(history):
         group=group.sort_values("date")
         if len(group)<7:
             raise ValueError("At least seven days of history required per store-SKU")
-        tomorrow=group.date.iloc[-1]+pd.Timedelta(days=1)
+        tomorrow=pd.Timestamp(group.date.iloc[-1])+pd.Timedelta(days=1)
         rows.append({"date":tomorrow,"store":store,"sku":sku,
                      "lag_1":float(group.units.iloc[-1]),
                      "lag_7":float(group.units.iloc[-7]),

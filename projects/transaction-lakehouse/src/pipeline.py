@@ -22,11 +22,11 @@ def generate_events(n=1000,seed=23):
         "currency":rng.choice(sorted(CURRENCIES),n),
         "status":rng.choice(["settled","pending"],n,p=[0.9,0.1])})
     duplicates=data.iloc[:10].copy()
-    duplicates["ingest_time"]+=pd.Timedelta(hours=3)
+    duplicates["ingest_time"]=pd.to_datetime(duplicates["ingest_time"],utc=True)+pd.Timedelta(hours=3)
     invalid=data.iloc[[10]].copy()
     invalid["transaction_id"]="bad_currency"
     invalid["currency"]="INVALID"
-    invalid["ingest_time"]+=pd.Timedelta(hours=4)
+    invalid["ingest_time"]=pd.to_datetime(invalid["ingest_time"],utc=True)+pd.Timedelta(hours=4)
     return pd.concat([data,duplicates,invalid],ignore_index=True)
 
 def curate(bronze):

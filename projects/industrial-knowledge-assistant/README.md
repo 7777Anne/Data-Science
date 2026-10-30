@@ -71,3 +71,6 @@ Tests cover document loading, retrieval, out-of-scope abstention and the API. Th
 ## Portfolio context
 
 This is an independently reproducible learning project exploring document QA, local RAG components and industrial workflows. It does **not** imply this system was used at Mercedes-Benz or deployed at Subex.
+
+### Index lifetime
+The retriever is cached per backend so repeated FastAPI requests do not rebuild the same TF-IDF index. Restart the service to load new documents. For a real deployment use versioned corpus snapshots and explicit cache invalidation.

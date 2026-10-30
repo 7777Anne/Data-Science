@@ -48,3 +48,8 @@ def test_ask_endpoint_includes_citations():
 def test_question_input_validation():
     assert client.post("/ask", json={"question": "a"}).status_code == 422
     assert client.post("/ask", json={"question": "test", "generator": "invalid"}).status_code == 422
+
+
+def test_retrieval_index_cached_between_requests():
+    from app import get_assistant
+    assert get_assistant("tfidf") is get_assistant("tfidf")

@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import os
 import re
+from functools import lru_cache
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -171,6 +172,12 @@ class Assistant:
         }
 
 
+@lru_cache(maxsize=2)
+def get_assistant(backend: str) -> Assistant:
+    """Reuse the retrieval index across requests; restart to refresh document corpus."""
+    return Assistant(backend=backend)
+
+
 class Question(BaseModel):
     question: str = Field(min_length=3, max_length=500)
     generator: str = Field(default="extractive", pattern="^(extractive|ollama)$")
@@ -187,7 +194,7 @@ def health() -> dict:
 @app.post("/ask")
 def ask(request: Question) -> dict:
     try:
-        engine = Assistant(backend=os.getenv("RETRIEVAL_BACKEND", "tfidf"))
+        engine = get_assistant(os.getenv("RETRIEVAL_BACKEND", "tfidf"))
         return engine.ask(request.question, request.generator)
     except (RuntimeError, OSError, KeyError) as exc:
         raise HTTPException(status_code=503, detail=f"Model backend unavailable: {exc}") from exc

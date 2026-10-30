@@ -9,8 +9,9 @@
 pip install -r projects/revenue-forecasting/requirements.txt
 python projects/revenue-forecasting/pipeline.py
 pytest -q projects/revenue-forecasting/tests
+python projects/revenue-forecasting/plot_results.py
 ```
 
-Outputs: `outputs/backtest.csv`, `outputs/forecasts.csv`, `outputs/metadata.json`.
+Outputs: `outputs/backtest.csv`, `outputs/forecasts.csv`, `outputs/metadata.json`, and a synthetic `outputs/revenue_forecast_example.png`.
 
 This short synthetic demonstration tests architecture, not accuracy. MAE values are **currency-unit errors**, while MAPE and sMAPE are percentage-based. Use complete data and horizon-matched tests before publishing comparison charts or accuracy claims.

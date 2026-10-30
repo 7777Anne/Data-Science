@@ -5,7 +5,8 @@
 ## Business outputs
 1. `outputs/one_step_backtest.csv` — actual vs prediction from a 60-day **one-step-ahead** evaluation; each prediction uses only observations that preceded its target date.
 2. `outputs/next_day_forecast.csv` — genuinely future next-day store-SKU unit forecasts, illustrative stockout flags and order suggestions.
-3. `outputs/metrics.json` — MAE and seasonal-naive MAE over the same rows.
+3. `outputs/retail_forecast_example.png` — generated actual-vs-prediction plot from synthetic backtest (run `python projects/retail-demand-forecasting/plot_results.py`).
+4. `outputs/metrics.json` — MAE and seasonal-naive MAE over the same rows.
 
 A 60-day *test span* is not a 60-day *forecast horizon*. No claim is made that the system performs reliable multi-step prediction or optimizes actual inventory. Assumed inventory level 40 and buffer 1.2 are demonstration parameters, not empirically calibrated business rules.
 

@@ -37,6 +37,8 @@ jobs:
           python projects/transaction-lakehouse/src/pipeline.py
           python projects/revenue-forecasting/pipeline.py
           python projects/industrial-knowledge-assistant/evaluate.py
+          python projects/retail-demand-forecasting/plot_results.py
+          python projects/revenue-forecasting/plot_results.py
       - name: Upload reproducible demo reports
         uses: actions/upload-artifact@v4
         with:
@@ -46,6 +48,8 @@ jobs:
             projects/fraud-risk-intelligence/artifacts/metrics.json
             projects/retail-demand-forecasting/outputs/metrics.json
             projects/retail-demand-forecasting/outputs/next_day_forecast.csv
+            projects/retail-demand-forecasting/outputs/retail_forecast_example.png
+            projects/revenue-forecasting/outputs/revenue_forecast_example.png
             projects/revenue-forecasting/outputs/backtest.csv
             projects/revenue-forecasting/outputs/forecasts.csv
             projects/transaction-lakehouse/artifacts/quality.json

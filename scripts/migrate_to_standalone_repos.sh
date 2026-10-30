@@ -10,6 +10,7 @@ if [[ "$MODE" != "--dry-run" && "$MODE" != "--execute" ]]; then
 fi
 command -v git >/dev/null || { echo "git required" >&2; exit 1; }
 command -v gh >/dev/null || { echo "GitHub CLI (gh) required" >&2; exit 1; }
+git subtree --help >/dev/null 2>&1 || { echo "git subtree required (install git with subtree support)" >&2; exit 1; }
 command -v python3 >/dev/null || { echo "Python 3 required" >&2; exit 1; }
 if [[ "$MODE" == "--execute" ]]; then gh auth status || exit 1; fi
 
@@ -73,6 +74,7 @@ else
   cp "$WORKDIR/source/templates/profile/README.md" "$WORKDIR/profile/README.md"
   (
     cd "$WORKDIR/profile"
+    git checkout -b main
     git add README.md
     git commit -m "Create recruiter-facing GitHub profile README"
     git push origin main

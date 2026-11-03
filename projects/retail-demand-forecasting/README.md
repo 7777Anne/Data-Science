@@ -32,6 +32,7 @@ Use documented M5 competition data, hold out 28 days per rolling origin, add mul
 - 7-day **recursive** demand forecasting, with all future lags generated from earlier predictions rather than future observed sales.
 - Two rolling-origin 7-day backtests with MAE and WAPE calculations; **no measured accuracy is claimed until the code is executed**.
 - Illustrative safety stock, reorder-point and order-up-to decisions from forecast daily units, assumed lead times and stock levels.
+- COGS-based period inventory turnover, observed sales velocity and days of supply; inventory snapshots and unit costs are explicitly **synthetic assumptions**.
 - Controlled log-linear price-demand **association** using price, promotion, weekday and trend. This must **not** be presented as identified causal elasticity.
 - Unit tests for schema contracts, leakage resistance, forecasting horizons, inventory arithmetic and parameter validation.
 
@@ -43,11 +44,12 @@ python -m pytest -q projects/retail-demand-forecasting/tests
 ```
 
 Outputs appear under `projects/retail-demand-forecasting/outputs/omnichannel_demo/`:
-`synthetic_channel_sales.csv`, `recursive_backtest.csv`, `seven_day_forecast.csv`, `inventory_recommendations.csv`, `price_associations_not_causal.csv`, `metrics.json`.
+`synthetic_channel_sales.csv`, `recursive_backtest.csv`, `seven_day_forecast.csv`, `inventory_recommendations.csv`, `price_associations_not_causal.csv`, `stock_turnover_kpis_assumed_inventory.csv`, `metrics.json`.
 
 ### Engineering and business limitations
 1. This artificial dataset has **observed sales**, not true uncensored demand. It omits actual stock levels; zero sales cannot be interpreted as zero demand.
 2. Inventory values, review intervals, lead time, error standard deviation and service factor are assumed, not calibrated. The 7-day forecast is used as an estimate of average daily rate; it is **not** a validated lead-time simulation.
-3. The price coefficient is observational and potentially confounded by promotions, availability and time effects. Do not claim causal pricing recommendations.
-4. No production AWS/Azure/GCP system, external API, PySpark job or deployment is implemented in this extension. These are separate future milestones.
-5. Next phases: integrate an appropriately licensed M5 or other real retail dataset, channel-specific inventory availability, calibrated probabilistic forecasts, cost-aware replenishment simulation, PySpark ETL, Docker and CI reports.
+3. Inventory turnover is computed using **assumed daily closing stock and costs**; it is not a measured retail business KPI.
+4. The price coefficient is observational and potentially confounded by promotions, availability and time effects. Do not claim causal pricing recommendations.
+5. No production AWS/Azure/GCP system, external API, PySpark job or deployment is implemented in this extension. These are separate future milestones.
+6. Next phases: integrate an appropriately licensed M5 or other real retail dataset, channel-specific inventory availability, calibrated probabilistic forecasts, cost-aware replenishment simulation, PySpark ETL, Docker and CI reports.

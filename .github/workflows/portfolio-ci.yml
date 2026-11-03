@@ -50,6 +50,7 @@ jobs:
             projects/retail-demand-forecasting/outputs/metrics.json
             projects/retail-demand-forecasting/outputs/omnichannel_demo/metrics.json
             projects/retail-demand-forecasting/outputs/omnichannel_demo/inventory_recommendations.csv
+            projects/retail-demand-forecasting/outputs/omnichannel_demo/stock_turnover_kpis_assumed_inventory.csv
             projects/retail-demand-forecasting/outputs/next_day_forecast.csv
             projects/retail-demand-forecasting/outputs/retail_forecast_example.png
             projects/revenue-forecasting/outputs/revenue_forecast_example.png

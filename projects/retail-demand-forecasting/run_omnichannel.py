@@ -8,6 +8,8 @@ from omnichannel import (
     recommend_inventory, price_elasticity_association,
 )
 
+from stock_metrics import make_assumed_stock_and_costs, stock_turnover_metrics
+
 ROOT = Path(__file__).resolve().parent
 
 def main():
@@ -23,17 +25,21 @@ def main():
     inventory["backorders"] = 0
     decisions = recommend_inventory(future, inventory, daily_error_sd=4.)
     price_associations = price_elasticity_association(sales)
+    snapshots, costs = make_assumed_stock_and_costs(sales)
+    turnover = stock_turnover_metrics(sales, snapshots, costs)
     outputs = ROOT / "outputs" / "omnichannel_demo"
     outputs.mkdir(parents=True, exist_ok=True)
     sales.to_csv(outputs / "synthetic_channel_sales.csv", index=False)
     backtest.to_csv(outputs / "recursive_backtest.csv", index=False)
     future.to_csv(outputs / "seven_day_forecast.csv", index=False)
     decisions.to_csv(outputs / "inventory_recommendations.csv", index=False)
+    turnover.to_csv(outputs / "stock_turnover_kpis_assumed_inventory.csv", index=False)
     price_associations.to_csv(outputs / "price_associations_not_causal.csv", index=False)
     metrics.update({
         "data_source": "synthetic; not real retail",
         "inventory_assumptions": "50 units on hand, 7-day lead/review time, 4 units daily error sd",
-        "pricing_assumptions": "observational log-price coefficient, not causal elasticity"
+        "pricing_assumptions": "observational log-price coefficient, not causal elasticity",
+        "turnover_assumptions": "synthetic closing inventory snapshots and assumed SKU costs"
     })
     (outputs / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")
     print(json.dumps(metrics, indent=2))

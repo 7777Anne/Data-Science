@@ -1,3 +1,11 @@
+> **Portfolio guide for AI/ML hiring teams**
+>
+> **Start here:** [Hotel Booking Cancellation](https://github.com/7777Anne/hotel-booking-cancellation-ml) for tested model serving, [Fraud Risk Intelligence](projects/fraud-risk-intelligence/README.md) for imbalanced classification, [Revenue Forecasting](projects/revenue-forecasting/README.md) for rolling-origin evaluation, and [Industrial Knowledge Assistant](projects/industrial-knowledge-assistant/README.md) for retrieval-backed QA.
+>
+> **Evidence boundary:** These are public learning and engineering demonstrations, not copies of confidential employer systems. The public projects are not represented as production deployments. Each project README identifies implemented functionality, limitations, and reproducibility instructions.
+>
+> **Relevant engineering skills:** Python, ML evaluation, leakage-aware preprocessing, FastAPI, testing, data pipelines, forecasting, and retrieval. **Agentic orchestration, cloud deployment, and advanced model extensions are development goals, not verified accomplishments here.**
+
 # Applied ML, Data Engineering, Forecasting and AI — Project Portfolio
 
 A curated set of **distinct problem-domain projects**, with runnable examples, evidence boundaries and separate setup instructions. All example transaction and factory data here is synthetic/fictional. Nothing in these repositories implies access to or redistribution of employer/customer data.
